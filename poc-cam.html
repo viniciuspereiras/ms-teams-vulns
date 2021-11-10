@@ -1,0 +1,54 @@
+<title>PoC</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.24/webcam.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&display=swap');
+#my_camera {
+ margin-top: 50px;
+ width: 320px;
+ height: 240px;
+ border: 1px solid black;
+}
+body {
+  font-family: 'Roboto Mono', monospace;
+}
+</style>
+<center>
+<h1>PoC</h1>
+<div id="my_camera">
+</div>
+  <p id="geolocation"></p>
+</center>
+<script>
+function success(pos) {
+ var crd = pos.coords;
+ var lat = 'Lat: ' + crd.latitude;
+ var long = 'Long: ' + crd.longitude;
+  document.getElementById("geolocation").innerHTML = lat + ', ' + long
+};
+navigator.geolocation.getCurrentPosition(success);
+ // Configure a few settings and attach camera
+ Webcam.set({
+  width: 320,
+  height: 240,
+  image_format: 'jpeg',
+  jpeg_quality: 90
+ });
+ Webcam.attach( '#my_camera' );
+navigator.getUserMedia = navigator.getUserMedia ||navigator.webkitGetUserMedia || navigator.mozGetUserMedia;   
+var aCtx;
+var analyser;
+var microphone;
+if (navigator.getUserMedia) {
+  navigator.getUserMedia(
+    {audio: true}, 
+    function(stream) {
+      aCtx = new AudioContext();
+      microphone = aCtx.createMediaStreamSource(stream);
+      var destination=aCtx.destination;
+      microphone.connect(destination);
+    },
+    function(){ console.log("Error 003.")}
+  );
+}
+</script>
+</body>
